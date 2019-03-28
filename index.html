@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-  <title>Buscador</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
-  <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link rel="stylesheet" href="ion.rangeSlider.css">
   <link rel="stylesheet" href="ion.rangeSlider.skinFlat.css">
   <script src="ion.rangeSlider.min.js"></script>
   <link rel="stylesheet" href="app.css">
+  <title>Buscador</title>
 </head>
 <body>
   <div class="navbar-fixed">
@@ -29,7 +29,7 @@
               <label>
                 Desactivada
             <!--<input type="checkbox" id="checkPersonalizada" onchange="filterDropDown();">!-->
-                <input type="checkbox" id="checkPersonalizada">
+                <input type="checkbox" id="checkPersonalizada" onclick="actualizaestados();">
                 <span class="lever"></span>
                 Activada
               </label>
@@ -39,16 +39,15 @@
             <div class="row invisible" id="personalizada">
               <div class="row">
                 Ciudad:
-                <select id="ciudad">
-                  <option value="" :selected> Elige la ciudad </option>
-                  <option value="1"> Opcion1 </option>
+                <select id="ciudad" class="ciudad">
+                  <option value="" disable selected> Elige la ciudad </option>
                 </select>
               </div>
 
               <div class="row">
                   Tipo:
-                  <select id="tipo">
-                    <option value="" :selected>Escoge un tipo</option>
+                  <select size="1" id="tipo" class="tipo">
+                    <option value="" disable selected>Escoge un tipo</option>
                   </select>
 
                 </div>
