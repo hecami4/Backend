@@ -9,6 +9,7 @@ var server = http.createServer(function(req,res){
 }).listen(3000);
 console.log('Server running on port 3000')
 */
+document.getElementById("checkPersonalizada").checked = false;
 $(document).ready(function(){
    $('select').formSelect();
    //$('select').material_select();
@@ -70,9 +71,10 @@ function getJsonData(){
 	$.getJSON( "data.json", function( data ) {
 		//asignamos datos al contenedor de datos
 		misDatosJson = data;
+    //console.log("valor ciudad inicio "+selectedCity.value)
 		//console.log(misDatosJson);
 		//ya que estan asignados, los procesamos
-		processData();
+    processData();
     creaCatalogos();
 	});
 }
@@ -90,8 +92,14 @@ updateRango();
 
 function actualizaestados(){
   valorpers =document.getElementById('checkPersonalizada').checked;
-  var filtroPorRango = valorpers
-  console.log(filtroPorRango)
+  var filtroPorRango = valorpers;
+  console.log(filtroPorRango);
+  /*if (selectedCity == 'undefined' && typeof(selectedType)=='undefined' && typeof(Current0)=='undefined' && typeof(Current1)=='undefined' && valorpers=false){
+  processData();
+  }
+  resultados();*/
+  //if (typeOf(selectedCity) !== 'undefined'){console.log("selected city = undefined")}
+
 }
 
 //SEGUNDO
@@ -131,6 +139,8 @@ function processData(){
 		  			+ "<br>"+value.Telefono +""
 		  			+ "<br>"+value.Direccion +""
 		  			+ "<br>"+value.Ciudad +", CP "+value.Codigo_Postal +"</p><hr /></div>";*/
+
+            creaCatalogos();
             resultados();
   			//	}
   			} else {
@@ -151,27 +161,25 @@ function processData(){
 /*
  * JALAMOS FILTROS
  */
+   $("#ciudad").change(function() {
+   selectedCity=document.getElementById("ciudad").val = '';
+   selectedCity=  $('select#ciudad').val();
+   console.log("ciudad "+selectedCity);
+   resultados();
+   });
 
+   $("#tipo").change(function() {
+   selectedType=document.getElementById("tipo").val = '';
+   selectedType=  $('select#tipo').val();
+   console.log("tipo "+selectedType);
+   resultados();
+   });
 
-$("#ciudad").change(function() {
-selectedCity=  $('select#ciudad').val();
-console.log("ciudad "+selectedCity),
-resultados();
-});
-
-$("#tipo").change(function() {
-selectedType=  $('select#tipo').val();
-console.log("tipo "+selectedType);
-resultados();
-});
-
-$("#rangoPrecio").on("change", function(){
-  var $inp = $(this);
-  var limInf1 = $inp.data("from");
-  var limSup1 = $inp.data("to");
-})
-
-
+   $("#rangoPrecio").on("change", function(){
+     var $inp = $(this);
+     var limInf1 = $inp.data("from");
+     var limSup1 = $inp.data("to");
+   })
 
 function creaCatalogos(){
   //ciudades += misDatosJson[i];
@@ -209,27 +217,32 @@ UniqueTypes.forEach(function(element1){
 }
 
 function resultados(){
-
+  $(".misdatos").html('');
+  var currentHtml;
   var output = misDatosJson.filter(function(x){
-    return x.Ciudad ==selectedCity &&
-           x.Tipo   ==selectedType &&
+    return x.Ciudad == selectedCity &&
+           x.Tipo   == selectedType &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
 
          });
-    $.each(output, function(){
+    console.log("lsargo output "+output.length)
+    output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
       currentHtml = "<div></div";
-      currentHtml = "<div><p>ID: "+ output.Id
-      + "<br>"+output.Tipo +""
-      + "<br>"+output.Precio +""
-      + "<br>"+output.Telefono +""
-      + "<br>"+output.Direccion +""
-      + "<br>"+output.Ciudad +", CP "+output.Codigo_Postal +"</p><hr /></div>";
+      currentHtml = "<div><p>ID: "+ Object.Id +""
+      + "<br>"+Object.Tipo +""
+      + "<br>"+Object.Precio +""
+      + "<br>"+Object.Telefono +""
+      + "<br>"+Object.Direccion +""
+      + "<br>"+Object.Ciudad +", CP "+Object.Codigo_Postal +"</p><hr /></div>";
+      $(".misdatos").append( currentHtml );
     })
+
 
 //console.log(Number(output[0].Precio.replace(/[^0-9.-]+/g,"")));
 console.log(output);
-console.log("liminf "+limInf);
+console.log("liminf prueba "+limInf);
 console.log("otrolimsup "+$("#rangoPrecio").to);
 console.log("limsup "+limSup);
 //console.log(Number(output[0].Precio.replace(/[^0-9.-]+/g,"")));
