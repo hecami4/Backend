@@ -161,39 +161,6 @@ function processData(){
 /*
  * JALAMOS FILTROS
  */
-function eligefiltros(){
- if ( typeof(selectedCity)!=='undefined' &&
-    ( typeof(selectedType) =='undefined' || selectedType=='undefined') ) {
-       console.log('todoCiudades')
-       console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-     //todoCiudades();
-   } else {
-     if ((typeof(selectedCity)=='undefined' || selectedCity=='undefined') &&
-              typeof(selectedType)!=='undefined') {
-              console.log('todoTipos')
-              console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-    } //todoTipos();
-  } else {
-    if ((typeof(selectedCity)!=='undefined' || selectedCity!=='undefined') &&
-              (typeof(selectedType)!=='undefined' || selectedType!=='undefined')) {
-              console.log('todocompleto')
-              console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-    } //todoCompleto();
-  } else {
-    if (document.getElementById('checkPersonalizada').checked  &&
-              (typeof(selectedCity) =='undefined' || selectedCity =='undefined') &&
-              (typeof(selectedType) =='undefined' || selectedType =='undefined'))  {
-              console.log('processData')
-              console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-       }
-      } else {
-        console.log('processData')
-        console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-     //processData();
- }
-};
-
-
    $("#ciudad").change(function() {
    selectedCity=  $('select#ciudad').val();
    console.log("ciudad "+selectedCity);
@@ -224,8 +191,8 @@ function creaCatalogos(){
   var setTypes = new Set(UniqueTypes);
   UniqueTypes = Array.from(setTypes);
   console.log(UniqueTypes)
-  $('.ciudad').html('<option value="undefined"> Todas las ciudades </option>');
-  $('.tipo').html('<option value="undefined"> Todos los tipos </option>');
+  $('.ciudad').html('<option value="" disable selected> Elige la ciudad </option>');
+  $('.tipo').html('<option value="" disable selected> Escoge un tipo </option>');
   //Ciudades = misDatosJson[index].Ciudad.distinct;
   //console.log ("catalogo ciudades " +Ciudades);
 
@@ -250,11 +217,8 @@ UniqueTypes.forEach(function(element1){
 function resultados(){
   $(".misdatos").html('');
   var currentHtml;
-
-//  if (typeof(ciudad)=='undefined')
-
   var output = misDatosJson.filter(function(x){
-    return x.Ciudad == selectedCity &&
+    return x.Ciudad == !filters.selectedCity.length || selectedCity &&
            x.Tipo   == selectedType &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0

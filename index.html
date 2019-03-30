@@ -40,14 +40,14 @@
               <div class="row">
                 Ciudad:
                 <select id="ciudad" class="ciudad">
-                  <option value="" disable selected> Elige la ciudad </option>
+                  <option value="undefined"> Todas las ciudades </option>
                 </select>
               </div>
 
               <div class="row">
                   Tipo:
                   <select size="1" id="tipo" class="tipo">
-                    <option value="" disable selected>Escoge un tipo</option>
+                    <option value="undefined">Todos los tipos</option>
                   </select>
 
                 </div>
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <button id="buscar" class="btn waves-effect waves-light blue" type="button" onclick="getJsonData();">Ver Todos</button>
+            <button id="buscar" class="btn waves-effect waves-light blue" type="button" onclick="eligefiltros();">Ver Todos</button>
           </div>
         </div>
       </div>
