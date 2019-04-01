@@ -10,6 +10,8 @@ var server = http.createServer(function(req,res){
 console.log('Server running on port 3000')
 */
 document.getElementById("checkPersonalizada").checked = false;
+getJsonData();
+
 $(document).ready(function(){
    $('select').formSelect();
    //$('select').material_select();
@@ -28,7 +30,7 @@ $("#rangoPrecio").ionRangeSlider({
   onFinish:function(data){
     var limSup= data.to
     var limInf= data.from
-    resultados();
+    //resultados();
   }
   })
 const limSup= $("#rangoPrecio").to
@@ -65,7 +67,7 @@ let filtroPorRango;
 //PRIMERO
 function getJsonData(){
 	//limpiamos en caso de que haya algo
-	$(".misdatos").html('');
+	$(".card-content").html('');
 	//llamamamos JSON con Jquery
 	// PHP i.e. $jsonData = json_decode(file_get_content("/mike/data-1.json"));
 	$.getJSON( "data.json", function( data ) {
@@ -74,7 +76,7 @@ function getJsonData(){
     //console.log("valor ciudad inicio "+selectedCity.value)
 		//console.log(misDatosJson);
 		//ya que estan asignados, los procesamos
-    processData();
+    //processData();
     creaCatalogos();
 	});
 }
@@ -104,12 +106,9 @@ function actualizaestados(){
 
 //SEGUNDO
 function processData(){
-	console.log("Tamanio de misdatosJson");
+  console.log("Tamanio de misdatosJson");
 	console.log(misDatosJson.length);
-
 	var currentHtml;
-
-
 	// si si tenemos datos, los procesamos:
 	if(misDatosJson.length > 0){
 		hayDatos = true;
@@ -140,18 +139,19 @@ function processData(){
 		  			+ "<br>"+value.Direccion +""
 		  			+ "<br>"+value.Ciudad +", CP "+value.Codigo_Postal +"</p><hr /></div>";*/
 
-            creaCatalogos();
-            resultados();
+            //creaCatalogos();
+            //resultados();
   			//	}
   			} else {
-  				currentHtml = "<div><p>ID: "+ value.Id
-	  			+ "<br>"+value.Tipo +""
-	  			+ "<br>"+value.Precio +""
-	  			+ "<br>"+value.Telefono +""
-	  			+ "<br>"+value.Direccion +""
-	  			+ "<br>"+value.Ciudad +", CP "+value.Codigo_Postal +"</p><hr /></div>";
+  				currentHtml = "<div><b> Direccion: </b> <p>"+ value.Direccion +"</p> </div>"
+	  			+ "<div><b> Ciudad: </b> <p>"+value.Ciudad +"</p> </div>"
+	  			+ "<div><b> Telefono: </b> <p>"+value.Telefono +"</p> </div>"
+	  			+ "<div><b> Codigo Postal: </b> <p>"+value.Codigo_Postal +"</p> </div>"
+	  			+ "<div><b> Precio: </b> <p>"+value.Precio +"</p> </div>"
+	  			+ "<div><b> Ciudad: </b> <p>"+value.Ciudad +"</p> </div>"
+          + "<div><b> Tipo: </b> <p>"+value.Tipo +"</p> </div> </div>";
   			}
-  			$(".misdatos").append( currentHtml );
+  			$(".card-content").append( currentHtml );
 
 		});
 	}
@@ -161,49 +161,55 @@ function processData(){
 /*
  * JALAMOS FILTROS
  */
+
+
+
 function eligefiltros(){
- if ( typeof(selectedCity)!=='undefined' &&
-    ( typeof(selectedType) =='undefined' || selectedType=='undefined') ) {
+  var valorCiudad;
+  var valorTipo;
+  var personal = document.getElementById('checkPersonalizada').checked
+
+  if (typeof(selectedCity) ==='undefined' || selectedCity ==='undefined'){
+    valorCiudad = 'nada'
+  } else {valorCiudad = 'algo'}
+
+  if (typeof(selectedType) ==='undefined' || selectedType ==='undefined'){
+    valorTipo = 'nada'
+  } else {valorTipo='algo'}
+
+ if (personal == false) {
+   console.log('processdata')
+   processData();
+ } else if ( valorCiudad === 'algo' && valorTipo === 'nada') {
        console.log('todoCiudades')
-       console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-     //todoCiudades();
-   } else {
-     if ((typeof(selectedCity)=='undefined' || selectedCity=='undefined') &&
-              typeof(selectedType)!=='undefined') {
-              console.log('todoTipos')
-              console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-    } //todoTipos();
-  } else {
-    if ((typeof(selectedCity)!=='undefined' || selectedCity!=='undefined') &&
-              (typeof(selectedType)!=='undefined' || selectedType!=='undefined')) {
-              console.log('todocompleto')
-              console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-    } //todoCompleto();
-  } else {
-    if (document.getElementById('checkPersonalizada').checked  &&
-              (typeof(selectedCity) =='undefined' || selectedCity =='undefined') &&
-              (typeof(selectedType) =='undefined' || selectedType =='undefined'))  {
-              console.log('processData')
-              console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-       }
-      } else {
-        console.log('processData')
-        console.log('ciudad '+selectedCity + ' tipo'+selectedType)
-     //processData();
- }
+       //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
+       todoCiudades();
+     } else if (valorCiudad === 'nada' && valorTipo === 'algo' ){
+                      console.log('todoTipos')
+                      //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
+                      todoTipos();
+            }else if (valorCiudad === 'nada' && valorTipo === 'nada'){
+                        console.log('soloPrecio')
+                        //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
+                        soloPrecio();
+                } else  if (valorCiudad === 'algo' && valorTipo === 'algo') {
+           console.log('todojunto')
+           //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
+           todojunto();
+ } else {processData();}
 };
 
 
    $("#ciudad").change(function() {
    selectedCity=  $('select#ciudad').val();
    console.log("ciudad "+selectedCity);
-   resultados();
+   //resultados();
 });
 
    $("#tipo").change(function() {
    selectedType=  $('select#tipo').val();
    console.log("tipo "+selectedType);
-  resultados();
+  //resultados();
    });
 
    $("#rangoPrecio").on("change", function(){
@@ -247,38 +253,96 @@ UniqueTypes.forEach(function(element1){
 
 }
 
-function resultados(){
-  $(".misdatos").html('');
+function todoCiudades(){
+  $(".card-content").html('');
   var currentHtml;
-
-//  if (typeof(ciudad)=='undefined')
-
   var output = misDatosJson.filter(function(x){
     return x.Ciudad == selectedCity &&
-           x.Tipo   == selectedType &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
-
          });
     console.log("lsargo output "+output.length)
     output.forEach(function(Object){
       /*$.each(output, function(Object){*/
       currentHtml = "<div></div";
-      currentHtml = "<div><p>ID: "+ Object.Id +""
-      + "<br>"+Object.Tipo +""
-      + "<br>"+Object.Precio +""
-      + "<br>"+Object.Telefono +""
-      + "<br>"+Object.Direccion +""
-      + "<br>"+Object.Ciudad +", CP "+Object.Codigo_Postal +"</p><hr /></div>";
-      $(".misdatos").append( currentHtml );
+      currentHtml = "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>";
+      $(".card-content").append( currentHtml );
     })
+}
 
 
-//console.log(Number(output[0].Precio.replace(/[^0-9.-]+/g,"")));
-console.log(output);
-console.log("liminf prueba "+limInf);
-console.log("otrolimsup "+$("#rangoPrecio").to);
-console.log("limsup "+limSup);
-//console.log(Number(output[0].Precio.replace(/[^0-9.-]+/g,"")));
+function todoTipos(){
+  $(".card-content").html('');
+  var currentHtml;
+  var output = misDatosJson.filter(function(x){
+    return x.Tipo   == selectedType &&
+           Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
+           Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
+         });
+    console.log("lsargo output "+output.length)
+    output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
+      currentHtml = "<div></div";
+      currentHtml = "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>";
+      $(".card-content").append( currentHtml );
+    })
+}
 
+
+function soloPrecio(){
+  $(".card-content").html('');
+  var currentHtml;
+  var output = misDatosJson.filter(function(x){
+    return Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
+           Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
+         });
+    console.log("lsargo output "+output.length)
+    output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
+      currentHtml = "<div></div";
+      currentHtml = "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>";
+      $(".card-content").append( currentHtml );
+    })
+}
+
+function todojunto(){
+  $(".card-content").html('');
+  var currentHtml;
+  var output = misDatosJson.filter(function(x){
+    return x.Ciudad == selectedCity &&
+           x.Tipo == selectedType &&
+           Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
+           Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
+         });
+    console.log("lsargo output "+output.length)
+    output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
+      currentHtml = "<div></div";
+      currentHtml = "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>";
+      $(".card-content").append( currentHtml );
+    })
 }
