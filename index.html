@@ -34,7 +34,6 @@
                 Activada
               </label>
         </div>
-
                 <!--  Busqueda personalizada -->
             <div class="row invisible" id="personalizada">
               <div class="row">
@@ -43,14 +42,12 @@
                   <option value="undefined"> Todas las ciudades </option>
                 </select>
               </div>
-
-              <div class="row">
-                  Tipo:
+            <div class="row">
+              Tipo:
                   <select size="1" id="tipo" class="tipo">
                     <option value="undefined">Todos los tipos</option>
                   </select>
-
-                </div>
+              </div>
                 <div class="row">
                   Precio:
                   <input type="text" id="rangoPrecio" onchange="updateRango();">
@@ -61,7 +58,8 @@
           </div>
         </div>
       </div>
-      <div class="col m8 lista">
+      <div class="row">
+      <div class="col m8 lista" id="aqui">
         Property
         <div class="card horizontal">
           <div class="card-image">
@@ -70,44 +68,72 @@
           <div class="card-stacked">
             <div class="card-content">
               <div>
-                <b>Direccion: </b><p></p>
+                <b>Direccion: </b><p>1</p>
               </div>
               <div>
-                <b>Ciudad: </b><p></p>
+                <b>Ciudad: </b><p>1</p>
               </div>
               <div>
-                <b>Telefono: </b><p></p>
+                <b>Telefono: </b><p>1</p>
               </div>
               <div>
-                <b>Código postal: </b><p></p>
+                <b>Código postal: </b><p>1</p>
               </div>
               <div>
-                <b>Precio: </b><p></p>
+                <b>Precio: </b><p>1</p>
               </div>
               <div>
-                <b>Tipo: </b><p></p>
-              </div>
-            </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-          <div class="card-action right-align">
-              <a href="#">Ver más</a>
-              <div class="colContenido">
-                <div class="tituloContenido card">
-                  <h5>Resultados de la búsqueda:</h5>
-                    <div id="rangoSeleccionado"></div>
-                    <div class="misdatos"></div>
-                  <div class="divider"></div>
-                  <!--<button type="button" name="todos" class="btn-flat waves-effect" id="mostrarTodos" onclick="getJsonData();">Mostrar Todos</button>!-->
-                </div>
+                <b>Tipo: </b><p>1</p>
               </div>
             </div>
+            <div class="card-action right-align">
+              <a href="#">Ver más</a>
           </div>
-        </div>
-        -->
+    </div>
+  </div>
+<!-- aqui empieza la prueba !-->
+<div class="card horizontal" id="aqui">
+  <div class="card-image">
+    <img src="img/home.jpg">
+  </div>
+  <div class="card-stacked">
+    <div class="card-content">
+      <div>
+        <b>Direccion: </b><p>2</p>
+      </div>
+      <div>
+        <b>Ciudad: </b><p>2</p>
+      </div>
+      <div>
+        <b>Telefono: </b><p>2</p>
+      </div>
+      <div>
+        <b>Código postal: </b><p>2</p>
+      </div>
+      <div>
+        <b>Precio: </b><p>2</p>
+      </div>
+      <div>
+        <b>Tipo: </b><p>2</p>
       </div>
     </div>
+    <div class="card-action right-align">
+      <a href="#">Ver más</a>
+  </div>
+</div>
+</div>
 
-    <a href="#" onclick="getJsonData();">hacer todo</a>
-    <div class="misdatos"></div>
+<!--
+
+!-->
+
+
+ </div>
+</div>
+</div>
+
+    <!--<a href="#" onclick="getJsonData();">hacer todo</a>
+    //<div class="misdatos"></div>!-->
 
   <script src="app.js"></script>
 </body>
