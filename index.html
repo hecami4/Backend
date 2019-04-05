@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <base href="/">
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -34,6 +35,7 @@
                 Activada
               </label>
         </div>
+
                 <!--  Busqueda personalizada -->
             <div class="row invisible" id="personalizada">
               <div class="row">
@@ -42,12 +44,14 @@
                   <option value="undefined"> Todas las ciudades </option>
                 </select>
               </div>
-            <div class="row">
-              Tipo:
+
+              <div class="row">
+                  Tipo:
                   <select size="1" id="tipo" class="tipo">
                     <option value="undefined">Todos los tipos</option>
                   </select>
-              </div>
+
+                </div>
                 <div class="row">
                   Precio:
                   <input type="text" id="rangoPrecio" onchange="updateRango();">
@@ -58,82 +62,44 @@
           </div>
         </div>
       </div>
-      <div class="row">
       <div class="col m8 lista" id="aqui">
         Property
-        <div class="card horizontal">
+        <div class="card horizontal" >
           <div class="card-image">
             <img src="img/home.jpg">
           </div>
           <div class="card-stacked">
             <div class="card-content">
               <div>
-                <b>Direccion: </b><p>1</p>
+                <b>Direccion: </b><p></p>
               </div>
               <div>
-                <b>Ciudad: </b><p>1</p>
+                <b>Ciudad: </b><p></p>
               </div>
               <div>
-                <b>Telefono: </b><p>1</p>
+                <b>Telefono: </b><p></p>
               </div>
               <div>
-                <b>Código postal: </b><p>1</p>
+                <b>Código postal: </b><p></p>
               </div>
               <div>
-                <b>Precio: </b><p>1</p>
+                <b>Precio: </b><p></p>
               </div>
               <div>
-                <b>Tipo: </b><p>1</p>
+                <b>Tipo: </b><p></p>
               </div>
             </div>
-            <div class="card-action right-align">
+          <div class="card-action right-align">
               <a href="#">Ver más</a>
+            </div>
           </div>
-    </div>
-  </div>
-<!-- aqui empieza la prueba !-->
-<div class="card horizontal" id="aqui">
-  <div class="card-image">
-    <img src="img/home.jpg">
-  </div>
-  <div class="card-stacked">
-    <div class="card-content">
-      <div>
-        <b>Direccion: </b><p>2</p>
-      </div>
-      <div>
-        <b>Ciudad: </b><p>2</p>
-      </div>
-      <div>
-        <b>Telefono: </b><p>2</p>
-      </div>
-      <div>
-        <b>Código postal: </b><p>2</p>
-      </div>
-      <div>
-        <b>Precio: </b><p>2</p>
-      </div>
-      <div>
-        <b>Tipo: </b><p>2</p>
+        </div>
+        -->
       </div>
     </div>
-    <div class="card-action right-align">
-      <a href="#">Ver más</a>
   </div>
-</div>
-</div>
-
-<!--
-
-!-->
-
-
- </div>
-</div>
-</div>
-
-    <!--<a href="#" onclick="getJsonData();">hacer todo</a>
-    //<div class="misdatos"></div>!-->
+    <!-- <a href="#" onclick="getJsonData();">hacer todo</a>
+    <div class="misdatos"></div> !-->
 
   <script src="app.js"></script>
 </body>

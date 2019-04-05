@@ -1,20 +1,9 @@
-/*var http = require("http");
-var fs   = require("fs");
+document.getElementById("checkPersonalizada").checked = false; //asegura que personalizada siempre inicie "apagada"
+getJsonData(); //procesa datos desde que abre
 
-var server = http.createServer(function(req,res){
-  res.writeHead(200,{'Content-Type':'text/html'});
-  var myReadStream = fs.createReadStream(__dirname+"/index.html","utf-8")
-  //res.end("It is working!\n")
-  myReadStream.pipe(res);
-}).listen(3000);
-console.log('Server running on port 3000')
-*/
-document.getElementById("checkPersonalizada").checked = false;
-getJsonData();
-
+//inicializa los dropdowns
 $(document).ready(function(){
    $('select').formSelect();
-   //$('select').material_select();
    var instance = M.FormSelect.getInstance('select');
     });
 
@@ -27,16 +16,20 @@ $("#rangoPrecio").ionRangeSlider({
   from: 0,
   to: 100000,
   prefix: "$",
+  onStart: function(data){
+    from=0,
+    to=100000
+  },
   onFinish:function(data){
     var limSup= data.to
     var limInf= data.from
-    //resultados();
+
   }
   })
 const limSup= $("#rangoPrecio").to
-console.log(limSup)
+//console.log(limSup)
 const limInf= $("#rangoPrecio").from
-console.dir(limInf)
+//console.dir(limInf)
 
 function setSearch() {
   let busqueda = $('#checkPersonalizada')
@@ -62,47 +55,52 @@ let hayDatos = false;
 let rango = "0;0";
 let ciudades;
 let tipos;
+let filtroPorRango;
 
-//PRIMERO TRAEMOS LOS DATOS
+//PRIMERO
 function getJsonData(){
-	//limpiamos  en caso de que haya algo
-	$("#aqui").html('');
+	//limpiamos en caso de que haya algo
+	$(".card-content").html('');
 	//llamamamos JSON con Jquery
 	$.getJSON( "data.json", function( data ) {
 		//asignamos datos al contenedor de datos
 		misDatosJson = data;
+  	//ya que estan asignados, los procesamos para caatalogos
     creaCatalogos();
 	});
 }
-
-//Capturamos los valores del slider
+//Inicializa el slider de 0-a100 o lee los valores
 function updateRango(){
 	rango = $('#rangoPrecio').val();
+  if(rango==""){
+      Current0=0;
+      Current1=100000;
+      }else {
   $("#rangoSeleccionado").html("Rango: " + rango);
   var rangoCurrent = rango.split(";");
+  console.log(rangoCurrent)
   Current0 = rangoCurrent[0];
   Current1 = rangoCurrent[1];
 }
+
+}
 updateRango();
 
-//PROCESA TODOS LOS DATOS ANTES DE QUE SE VEAN LOS FILTROS
+//SEGUNDO
 function processData(){
-  console.log("Tamanio de misdatosJson");
-	console.log(misDatosJson.length);
+  //console.log("Tamanio de misdatosJson");
+	//console.log(misDatosJson.length);
 	var currentHtml;
-	// si hay datos, los procesamos:
+  $('#aqui').html('')
+	// si si tenemos datos, los procesamos:
 	if(misDatosJson.length > 0){
 		hayDatos = true;
 		var rangoCurrent = rango.split(";");
-
+	  //console.log(filtroPorRango);
   	$.each( misDatosJson, function( key, value ) {
-    		console.log("-------------- LLAVE: " + key + " PRECIO" + value.Precio);
-  			if(document.getElementById('checkPersonalizada').checked){
-
-  			} else {
-        	currentHtml = "<div class='card horizontal'>"
-          + "<div class='card-image'>"
-          + "<img src='img/home.jpg'> </div>"
+    		// revisa el tamaño y llaves del arreglo console.log("-------------- LLAVE: " + key + " PRECIO" + value.Precio);
+  			  currentHtml = "<div class='card horizontal'>"
+          + "<div class='card-image'><img src='img/home.jpg'> </div>"
           + "<div class='card-stacked'>"
           + "<div class='card-content'>"
           + "<div><b> Direccion: </b> <p>"+ value.Direccion +"</p> </div>"
@@ -110,19 +108,16 @@ function processData(){
 	  			+ "<div><b> Telefono: </b> <p>"+value.Telefono +"</p> </div>"
 	  			+ "<div><b> Codigo Postal: </b> <p>"+value.Codigo_Postal +"</p> </div>"
 	  			+ "<div><b> Precio: </b> <p>"+value.Precio +"</p> </div>"
-	  			+ "<div><b> Tipo: </b> <p>"+value.Tipo +"</p> </div> </div>"
-          + "<div class='card-action right-align'><a href='#'>Ver más</a></div> "
-          + "</div></div>";
-  			}
+	  			+ "<div><b> Ciudad: </b> <p>"+value.Ciudad +"</p> </div>"
+          + "<div><b> Tipo: </b> <p>"+value.Tipo +"</p> </div> </div>"
+          + "<div class='card-action right-align'>"
+          + "<a href='#'>Ver más</a> </div> </div> </div>";
   			$("#aqui").append( currentHtml );
-
 		});
 	}
-
 }
 
-//ESTABLECE VALORES PARA ELEGIR RUTINA DE MUESTRA DE PROPIEDADES
-
+ //Define la rutina a seguir
 function eligefiltros(){
   var valorCiudad;
   var valorTipo;
@@ -137,41 +132,41 @@ function eligefiltros(){
   } else {valorTipo='algo'}
 
  if (personal == false) {
-   console.log('processdata')
+   //console.log('processdata')
    processData();
  } else if ( valorCiudad === 'algo' && valorTipo === 'nada') {
-       console.log('todoCiudades')
+    //   console.log('todoCiudades')
        //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
        todoCiudades();
      } else if (valorCiudad === 'nada' && valorTipo === 'algo' ){
-                      console.log('todoTipos')
+      //                console.log('todoTipos')
                       //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
                       todoTipos();
             }else if (valorCiudad === 'nada' && valorTipo === 'nada'){
-                        console.log('soloPrecio')
+        //                console.log('soloPrecio')
                         //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
                         soloPrecio();
                 } else  if (valorCiudad === 'algo' && valorTipo === 'algo') {
-           console.log('todojunto')
+          // console.log('todojunto')
            //console.log('ciudad '+selectedCity + ' tipo'+selectedType)
            todojunto();
  } else {processData();}
 };
 
 /*
- *  VALORES DE FILTROS
+ * JALAMOS FILTROS
  */
 
    $("#ciudad").change(function() {
    selectedCity=  $('select#ciudad').val();
-   console.log("ciudad "+selectedCity);
-   //resultados();
+   //console.log("ciudad "+selectedCity);
+
 });
 
    $("#tipo").change(function() {
    selectedType=  $('select#tipo').val();
-   console.log("tipo "+selectedType);
-  //resultados();
+   //console.log("tipo "+selectedType);
+
    });
 
    $("#rangoPrecio").on("change", function(){
@@ -180,23 +175,25 @@ function eligefiltros(){
      var limSup1 = $inp.data("to");
    })
 
-//LLENAMOS CATALOGOS PARA FILTROS
 
+//llena los dropdowns con las ciudades en json
 function creaCatalogos(){
+  //ciudades += misDatosJson[i];
   var UniqueCities= $.unique(misDatosJson.map(function (d) {return d.Ciudad;}));
+  //console.log(UniqueCities);
   var setCities = new Set(UniqueCities);
   UniqueCities = Array.from(setCities);
-  console.log(UniqueCities);
   var UniqueTypes= $.unique(misDatosJson.map(function (d) {return d.Tipo;}));
+  //console.log(UniqueTypes);
   var setTypes = new Set(UniqueTypes);
   UniqueTypes = Array.from(setTypes);
-  console.log(UniqueTypes)
   $('.ciudad').html('<option value="undefined"> Todas las ciudades </option>');
   $('.tipo').html('<option value="undefined"> Todos los tipos </option>');
+  //Ciudades = misDatosJson[index].Ciudad.distinct;
+  //console.log ("catalogo ciudades " +Ciudades);
 
 UniqueCities.forEach(function(element0){
   Ciudades= document.getElementById("ciudad");
-  console.log(element0);
   $('.ciudad').formSelect().append($("<option value='"+element0+"'>"+element0+"</option>"))
   $('select').formSelect();
 
@@ -204,7 +201,6 @@ UniqueCities.forEach(function(element0){
 
 UniqueTypes.forEach(function(element1){
   Tipos= document.getElementById("tipo");
-  console.log(element1);
   $('.tipo').formSelect().append($("<option value='"+element1+"'>"+element1+"</option>"))
   $('select').formSelect();
   updateRango();
@@ -212,7 +208,7 @@ UniqueTypes.forEach(function(element1){
 
 }
 
-//CUANDO SOLO HAY CIUDAD SELECCIONADA
+//ejecuta rutinas y muestra resultados
 function todoCiudades(){
   $("#aqui").html('');
   var currentHtml;
@@ -221,28 +217,28 @@ function todoCiudades(){
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
          });
-    console.log("lsargo output "+output.length)
+    //console.log("lsargo output "+output.length)
     output.forEach(function(Object){
       /*$.each(output, function(Object){*/
       currentHtml = "<div></div";
       currentHtml = "<div class='card horizontal'>"
-                  + "<div class='card-image'>"
-                  + "<img src='img/home.jpg'> </div>"
-                  + "<div class='card-stacked'>"
-                  + "<div class='card-content'>"
-                  + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
-	  			        + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
-	  			        + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
-	  			        + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
-	  			        + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
-	  			        + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
-                  + "<div class='card-action right-align'><a href='#'>Ver más</a></div> "
-                  + "</div></div>";
+      + "<div class='card-image'><img src='img/home.jpg'> </div>"
+      + "<div class='card-stacked'>"
+      + "<div class='card-content'>"
+      + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
+      + "<div class='card-action right-align'><a href='#'>Ver más</a></div>"
+      + "</div></div>";
       $("#aqui").append( currentHtml );
     })
 }
 
-//CUANDO SOLO HAY TIPO SELECCIONADO
+
 function todoTipos(){
   $("#aqui").html('');
   var currentHtml;
@@ -251,27 +247,28 @@ function todoTipos(){
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
          });
-    console.log("lsargo output "+output.length)
+    //console.log("lsargo output "+output.length)
     output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
       currentHtml = "<div></div";
       currentHtml = "<div class='card horizontal'>"
-                  + "<div class='card-image'>"
-                  + "<img src='img/home.jpg'> </div>"
-                  + "<div class='card-stacked'>"
-                  + "<div class='card-content'>"
-                  + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
-	  			        + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
-	  			        + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
-	  			        + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
-	  			        + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
-	  			        + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
-                  + "<div class='card-action right-align'><a href='#'>Ver más</a></div> "
-                  + "</div></div>";
+      + "<div class='card-image'><img src='img/home.jpg'> </div>"
+      + "<div class='card-stacked'>"
+      + "<div class='card-content'>"
+      + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
+      + "<div class='card-action right-align'><a href='#'>Ver más</a></div>"
+      + "</div></div>";
       $("#aqui").append( currentHtml );
     })
 }
 
-//CUANDO NO HAY NI CIUDAD NI TIPO SELECCIONADO FILTRAMOS POR VALORES
+
 function soloPrecio(){
   $("#aqui").html('');
   var currentHtml;
@@ -279,27 +276,27 @@ function soloPrecio(){
     return Number(x.Precio.replace(/[^0-9.-]+/g,"")) <= Current1 &&
            Number(x.Precio.replace(/[^0-9.-]+/g,"")) >= Current0
          });
-    console.log("lsargo output "+output.length)
+    //console.log("lsargo output "+output.length)
     output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
       currentHtml = "<div></div";
       currentHtml = "<div class='card horizontal'>"
-                  + "<div class='card-image'>"
-                  + "<img src='img/home.jpg'> </div>"
-                  + "<div class='card-stacked'>"
-                  + "<div class='card-content'>"
-                  + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
-	  			        + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
-	  			        + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
-	  			        + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
-	  			        + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
-	  			        + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
-                  + "<div class='card-action right-align'><a href='#'>Ver más</a></div> "
-                  + "</div></div>";
+      + "<div class='card-image'><img src='img/home.jpg'> </div>"
+      + "<div class='card-stacked'>"
+      + "<div class='card-content'>"
+      + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
+      + "<div class='card-action right-align'><a href='#'>Ver más</a></div>"
+      + "</div></div>";
       $("#aqui").append( currentHtml );
     })
 }
 
-//CUANDO TODOS LOS FILTROS TIENEN VALORES
 function todojunto(){
   $("#aqui").html('');
   var currentHtml;
@@ -311,20 +308,21 @@ function todojunto(){
          });
     console.log("lsargo output "+output.length)
     output.forEach(function(Object){
+      /*$.each(output, function(Object){*/
       currentHtml = "<div></div";
       currentHtml = "<div class='card horizontal'>"
-                  + "<div class='card-image'>"
-                  + "<img src='img/home.jpg'> </div>"
-                  + "<div class='card-stacked'>"
-                  + "<div class='card-content'>"
-                  + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
-	  			        + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
-	  			        + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
-	  			        + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
-	  			        + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
-	  			        + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
-                  + "<div class='card-action right-align'><a href='#'>Ver más</a></div> "
-                  + "</div></div>";
+      + "<div class='card-image'><img src='img/home.jpg'> </div>"
+      + "<div class='card-stacked'>"
+      + "<div class='card-content'>"
+      + "<div><b> Direccion: </b> <p>"+ Object.Direccion +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Telefono: </b> <p>"+Object.Telefono +"</p> </div>"
+      + "<div><b> Codigo Postal: </b> <p>"+Object.Codigo_Postal +"</p> </div>"
+      + "<div><b> Precio: </b> <p>"+Object.Precio +"</p> </div>"
+      + "<div><b> Ciudad: </b> <p>"+Object.Ciudad +"</p> </div>"
+      + "<div><b> Tipo: </b> <p>"+Object.Tipo +"</p> </div> </div>"
+      + "<div class='card-action right-align'><a href='#'>Ver más</a></div>"
+      + "</div></div>";
       $("#aqui").append( currentHtml );
     })
 }
